@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Snake Game</title>
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background: black;
+    }
+
+    h1, p, button {
+      color: white;
+      font-size: 20px;
+    }
+
+    canvas {
+      border: 1px solid white;
+      display: none;
+    }
+
+    #gameContainer {
+      display: none;
+      text-align: center;
+    }
+
+    #startScreen {
+      text-align: center;
+    }
+
+    button {
+      background-color: green;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: darkgreen;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="startScreen">
+    <h1>Snake Game</h1>
+    <p>Press "Start Game" to begin</p>
+    <button id="startButton">Start Game</button>
+  </div>
+
+  <div id="gameContainer">
+    <header>
+      <h1>Points: <span id="Points">0</span></h1>
+      <p>High Score:<span id="scoreArray"></span></p>
+    </header>
+    
+    <button id="pause">Pause</button>
+    <canvas width="400" height="400" id="game"></canvas>
+  </div>
+
+  <script>
+    var canvas = document.getElementById('game');
+    var context = canvas.getContext('2d');
+    var startScreen = document.getElementById("startScreen");
+    var gameContainer = document.getElementById("gameContainer");
+    var startButton = document.getElementById("startButton");
+
+    var points = 0;
+    document.getElementById("Points").innerText = points;
+
+    var score = [];
+    var grid = 16;
+    var count = 0;
+    var gameRunning = false;
+    var gameNum = 1;
+
+    var snake = {
+      x: 160,
+      y: 160,
+      dx: grid,
+      dy: 0,
+      cells: [],
+      maxCells: 4
+    };
+
+    var apple = {
+      x: 320,
+      y: 320
+    };
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function updateScoreDisplay() {
+      
+      document.getElementById("scoreArray").innerText = score.join(", ");
+    }
+
+    function resetGame() {
+      score.push(points);
+      updateScoreDisplay();
+      points = 0;
+      document.getElementById("Points").innerText = points;
+      gameNum++
+
+      snake.x = 160;
+      snake.y = 160;
+      snake.cells = [];
+      snake.maxCells = 4;
+      snake.dx = grid;
+      snake.dy = 0;
+
+      apple.x = getRandomInt(0, 25) * grid;
+      apple.y = getRandomInt(0, 25) * grid;
+    }
+
+    function loop() {
+      if (!gameRunning) return;  // Stop if the game is not running
+
+      requestAnimationFrame(loop);
+
+      if (++count < 4) return;
+
+      count = 0;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      snake.x += snake.dx;
+      snake.y += snake.dy;
+
+      if (snake.x < 0) snake.x = canvas.width - grid;
+      else if (snake.x >= canvas.width) snake.x = 0;
+
+      if (snake.y < 0) snake.y = canvas.height - grid;
+      else if (snake.y >= canvas.height) snake.y = 0;
+
+      snake.cells.unshift({ x: snake.x, y: snake.y });
+
+      if (snake.cells.length > snake.maxCells) {
+        snake.cells.pop();
+      }
+
+      context.fillStyle = 'red';
+      context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
+
+      context.fillStyle = 'green';
+      snake.cells.forEach(function (cell, index) {
+        context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
+
+        if (cell.x === apple.x && cell.y === apple.y) {
+          points++;
+          document.getElementById("Points").innerText = points;
+          snake.maxCells++;
+
+          apple.x = getRandomInt(0, 25) * grid;
+          apple.y = getRandomInt(0, 25) * grid;
+        }
+
+        for (var i = index + 1; i < snake.cells.length; i++) {
+          if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+            resetGame();
+          }
+        }
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (!gameRunning) return; // Prevent movement before game starts
+
+      if (e.which === 37 && snake.dx === 0) {
+        snake.dx = -grid;
+        snake.dy = 0;
+      } else if (e.which === 38 && snake.dy === 0) {
+        snake.dy = -grid;
+        snake.dx = 0;
+      } else if (e.which === 39 && snake.dx === 0) {
+        snake.dx = grid;
+        snake.dy = 0;
+      } else if (e.which === 40 && snake.dy === 0) {
+        snake.dy = grid;
+        snake.dx = 0;
+      }
+    });
+
+    startButton.addEventListener("click", function () {
+      startScreen.style.display = "none";
+      gameContainer.style.display = "block";
+      canvas.style.display = "block";
+      gameRunning = true;
+      requestAnimationFrame(loop);
+    });
+
+  </script>
+
+</body>
+</html>
