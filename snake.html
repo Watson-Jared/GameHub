@@ -3,25 +3,26 @@
 <head>
   <title>Snake game</title>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="snakeStyle.css">
 </head>
  
 <body>
 
 
-  <header>
-    <h1 id="Points"></h1>
-   
+  <header>    
+    <h1>Points: <span id="Points">0</span></h1>   
   </header>
 
     
 <main>
-  <button id="pause">Pause</button>  
+  <div id="buttonContainer">
+    <button id="pause">Pause</button> 
+    <button id="back">Back</button> 
+  </div>
   <canvas width="400" height="400" id="game"> 
   </canvas>
-  <script src="game.js"></script>
-
-<p>High Score: <span id="scoreArray"></span></p>
+  <p>High Score: <span id="scoreArray"></span></p>
+  <script src="snake.js"></script>
 </main>
 
 </body>

@@ -2,7 +2,7 @@ var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
 
 var points = 0
-document.getElementById("Points").innerHTML = points
+document.getElementById("Points").innerText = points
 
 
 
@@ -97,7 +97,7 @@ function loop() {
 
     if (cell.x === apple.x && cell.y === apple.y) {
       points++
-      document.getElementById("Points").innerHTML = points;
+      document.getElementById("Points").innerText = points;
       snake.maxCells++;
 
 
@@ -116,7 +116,7 @@ function loop() {
         }
 
         points = 0
-        document.getElementById("Points").innerHTML =  points;
+        document.getElementById("Points").innerText = points;
         
 
         snake.x = 160;

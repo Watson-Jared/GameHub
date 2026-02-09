@@ -11,6 +11,18 @@ body {
   
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+#buttonContainer {
+  display: flex;
+  gap: 10px;
+}
+
 h1{
   color: white;
   margin-right: 100px;   
