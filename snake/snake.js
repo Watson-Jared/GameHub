@@ -144,7 +144,7 @@ document.getElementById('pause').addEventListener('click', function() {
 });
 
 document.getElementById('back').addEventListener('click', function() {
-  window.location.href = '../games.html';
+  window.location.href = '../index.html';
 });
 
 document.addEventListener('keydown', function(e) {
