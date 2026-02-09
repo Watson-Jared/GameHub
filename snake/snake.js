@@ -143,6 +143,10 @@ document.getElementById('pause').addEventListener('click', function() {
   }
 });
 
+document.getElementById('back').addEventListener('click', function() {
+  window.location.href = '../games.html';
+});
+
 document.addEventListener('keydown', function(e) {
 
   if (e.which === 37 && snake.dx === 0) {
