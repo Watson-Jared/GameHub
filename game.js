@@ -4,9 +4,10 @@ var context = canvas.getContext('2d');
 var points = 0
 document.getElementById("Points").innerHTML = points
 
-var username = []
 
-var score = []
+
+var highestScore = 0;
+var isPaused = false;
 
 var grid = 16;
 var count = 0;
@@ -36,14 +37,18 @@ function getRandomInt(min, max) {
 }
 
 function updateScoreDisplay() {
-  document.getElementById("scoreArray").innerText = score.join(", ");
+  document.getElementById("scoreArray").innerText = highestScore;
 }
 
 function loop() {
   requestAnimationFrame(loop);
 
+  if (isPaused) {
+    return;
+  }
 
-  if (++count < 4) {
+  var speedThreshold = Math.max(1, 6 - Math.floor(points / 10));
+  if (++count < speedThreshold) {
     return;
   }
 
@@ -105,8 +110,10 @@ function loop() {
 
 
       if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-        score.push(points);
-        updateScoreDisplay();
+        if (points > highestScore) {
+          highestScore = points;
+          updateScoreDisplay();
+        }
 
         points = 0
         document.getElementById("Points").innerHTML =  points;
@@ -126,6 +133,15 @@ function loop() {
   });
 }
 
+
+document.getElementById('pause').addEventListener('click', function() {
+  isPaused = !isPaused;
+  if (isPaused) {
+    document.getElementById('pause').innerText = 'Resume';
+  } else {
+    document.getElementById('pause').innerText = 'Pause';
+  }
+});
 
 document.addEventListener('keydown', function(e) {
 
